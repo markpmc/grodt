@@ -4,7 +4,7 @@ omxs30Symbols<-c('ABB.ST', 'ALFA.ST', 'ASSA-B.ST', 'AZN.ST', 'ATCO-A.ST', 'ATCO-
 
 loadData<-function(stocks)
 {
-	ret<-yahooSeries(stocks, nDaysBack=366)
+	ret<-yahooSeries(stocks, nDaysBack=3660)
 	ret
 }
 
