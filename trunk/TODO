@@ -1,3 +1,7 @@
 * Transfer the portfolio management code
 * Implement buy/sell signals using quantmod and rmetrics
+* Test a number of different trading rules
+	- MA30 and MA100 rules
+	- MACD rules
+	- RSI
 
