@@ -25,8 +25,9 @@ $content = $formatter->format($tree);
 # Clean up
 unlink($foutname);
 
-# Error checking for symbol not found
+# Error checking for symbol not found and no data found
 die "Error: Unknown symbol '$symbol', please provide a valid one.\n" if($content =~ /Your search for "$symbol" did not match/);
+die "Warning: No analyst data found for '$symbol'.\n" if($content =~ /No analyst recommendations and revisions data/);
 
 # Cut away unnecessary text and empty lines
 $content =~ s/^.+Analyst\sRecommendations\sand\sRevisions(.+)Consensus\sEstimates\sAnalysis.+/$1/s;
