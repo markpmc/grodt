@@ -1,3 +1,10 @@
 #!/bin/bash
 
-for i in `cat OMXN40SymbolsReuters.csv`; do ./parseRecommendation.pl $i > "$i.txt"; done;
+if [ -z "$1" ]; then 
+	echo usage: $0 symbolsfile
+	exit
+fi
+
+for i in `cat $1`; do 
+	./parseRecommendation.pl $i > "$i.txt"; 
+done
