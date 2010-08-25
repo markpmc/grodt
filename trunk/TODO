@@ -4,4 +4,4 @@
 	- MA30 and MA100 rules
 	- MACD rules
 	- RSI
-
+* Fix the import of data from file so that you can import only specific symbols
