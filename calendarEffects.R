@@ -10,10 +10,14 @@ mySymbols<-c('lupe.st', 'bets-b.st', 'bp', 'abb.st', 'eric-b.st', 'fing-b.st', '
 #myData<-fetchData(mySymbols, 365)
 myData<-readSeries('data/omxs30_10Years.csv', sep=',')
 
-# Get the log returns
-myReturns<-returns(Cl(myData))
+# Get only the Close prices
+myData<-Cl(myData)
+
+myMonthlyReturns<-applySeries(returns(myData, "discrete", TRUE), by="monthly", FUN="colSums")
+myWeeklyReturns<-applySeries(returns(myData, "discrete", TRUE), by="weekly", FUN="colSums")
+
 # Add day of week and convert to data frame
-myDf<-as.data.frame(myReturns)
+myDf<-as.data.frame(returns(myData))
 myDf<-cbind(myDf, Day=weekdays(as.Date(rownames(myReturns))))
 myDf<-cbind(myDf, Month=months(as.Date(rownames(myReturns))))
 myDf<-cbind(myDf, Quarter=quarters(as.Date(rownames(myReturns))))
