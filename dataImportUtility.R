@@ -1,11 +1,5 @@
 require(fImport)
 
-# Write the data out to a file
-writeData<-function(mydat, fname)
-{
-	write.csv(mydat, file=fname)
-}
-
 # Fetch the data from yahooImport
 fetchData<-function(stocks, ndays=365)
 {
@@ -19,6 +13,5 @@ fetchData<-function(stocks, ndays=365)
 	colnames(myData)<-gsub(".Adj.Close", ".Adjusted", colnames(myData))
 	myData
 }
-
 
 
