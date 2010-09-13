@@ -12,15 +12,16 @@ sma30100<-function(x, params, burn=0, short=FALSE)
 magicTTR<-function(x, params, burn=0, short=FALSE)
 {
 	ret<-rep(0, length(x))
-	smaShort<-12
-	smaLong<-26
+	smaShort<-30
+	smaLong<-100
+	rsiPar<-50
 	d<-smaLong-smaShort
 	xsmall<-x[-c(1:d)]
 	mySma<-SMA(xsmall, n=smaShort) - SMA(x, n=smaLong)
 	myMacd<-macd4(x[-c(1:(smaLong-1))])
 	myRsi<-RSI(x, 21)
 	myRsi<-myRsi[-c(1:(smaLong-1))]
-	inds<-intersect(intersect(which(mySma>0), which(myMacd>0)), which(myRsi<50))
+	inds<-intersect(intersect(which(mySma>0), which(myMacd>0)), which(myRsi<rsiPar))
 	ret[inds+d-1]<-1
 	ret
 }
