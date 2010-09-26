@@ -6,5 +6,5 @@ if [ -z "$1" ]; then
 fi
 
 for i in `cat $1`; do 
-	./parseRecommendation.pl $i > "$i.txt"; 
+	./parseRecommendation.pl $i > data/recommendations/"$i.txt"; 
 done
