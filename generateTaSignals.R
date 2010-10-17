@@ -1,14 +1,40 @@
 require(ttrTests)
 
-sma30100<-function(x, params, burn=0, short=FALSE)
+smaSignal<-function(x, params=c(30,100), burn=0, short=FALSE)
 {
 	ret<-rep(0, length(x))
-	d<-100-30
-	inds<-which(SMA(x[-(1:d)], n=30)>SMA(x, n=100))
-	ret[inds+d-1]<-1
+	d<-SMA(x, n=params[1])-SMA(x, n=params[2])
+	d<-ifelse(d<0,-1,1)
+	d<-diff(d)
+	ret[d<0]<--1
+	ret[d>0]<-1
 	ret
 }
 
+rsiSignal<-function(x, params=c(21, 30, 70), burn=0, short=FALSE)
+{
+	ret<-rep(0, length(x))
+	overSold<-params[2]
+	overBought<-params[3]
+	y<-RSI(x, params[1])
+	ret[y<overSold]<-1
+	ret[y>overBought]<--1
+	ret
+}
+
+macdSignal<-function(x, params=c(12, 26, 9), burn=0, short=FALSE)
+{
+	ret<-rep(0, length(x))
+	y<-MACD(x, params[1], params[2], params[3])
+	y<-y[, "macd"]-y[, "signal"]
+	d<-ifelse(y<0,-1,1)
+	d<-diff(d)
+	ret[d<0]<--1
+	ret[d>0]<-1
+	ret
+}
+
+# Not done, and not working. Need more work
 magicTTR<-function(x, params, burn=0, short=FALSE)
 {
 	ret<-rep(0, length(x))
