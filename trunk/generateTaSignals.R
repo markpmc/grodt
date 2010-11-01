@@ -19,8 +19,24 @@ rsiSignal<-function(x, params=c(21, 30, 70), burn=0, short=FALSE)
 	overSold<-params[2]
 	overBought<-params[3]
 	y<-RSI(x, params[1])
+	y[is.na(y)]<-50
 	ret[y<overSold]<-1
 	ret[y>overBought]<-0
+	ret
+}
+
+# Experimental rsi testing if buying at 30 and keeping for a few days works
+rsiSignal2<-function(x, params=c(21, 30, 70, 7), burn=0, short=FALSE)
+{
+	ret<-rep(0, length(x))
+	overSold<-params[2]
+	overBought<-params[3]
+	y<-RSI(x, params[1])
+	y[is.na(y)]<-50
+	ret[y<overSold]<-1
+	ret[y>overBought]<-0
+	inds<-which(ret>0)
+	for(i in inds) ret[seq(i,(i+params[4]))]<-1
 	ret
 }
 
