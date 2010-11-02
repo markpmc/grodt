@@ -6,7 +6,7 @@ require('timeSeries')
 plotSignal<-function(x, signal)
 {
 	#chartSeries(x, TA=c(addMACD(30,100,15),addBBands(),addRSI(21)))
-	chartSeries(x, TA=c(addBBands(),addRSI(21)))
+	chartSeries(x, TA=c(addBBands(),addRSI(21),addMomentum(10)))
 	abline(v=which(signal<0), col="red")
 	abline(v=which(signal>0), col="green")
 }
