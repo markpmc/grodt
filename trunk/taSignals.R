@@ -10,3 +10,14 @@ rsiSignal<-function(x, params=c(21, 30, 70))
 	ret[y>overBought]<--1
 	ret
 }
+
+smaSignal<-function(x, params=c(30,100))
+{
+	ret<-rep(0, length(x))
+	d<-SMA(x, n=params[1])-SMA(x, n=params[2])
+	d<-ifelse(d<0,-1,1)
+	d[is.na(d)]<-0
+	ret<-d
+	ret
+}
+
