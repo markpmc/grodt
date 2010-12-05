@@ -1,14 +1,10 @@
-require(fImport)
 require(fPortfolio)
 require(quantmod)
 
 source('dataImportUtility.R')
 source('taSignals.R')
 
-mySymbols<-c("ABB.ST", "ALFA.ST", "ASSA-B.ST", "AZN.ST", "ATCO-A.ST", "ATCO-B.ST", "BOL.ST", "ELUX-B.ST", "ERIC-B.ST",
-	"GETI-B.ST", "HMB.ST", "INVE-B.ST", "LUPE.ST", "MTG-B.ST", "NOKI-SEK.ST", "NDA-SEK.ST", "SAND.ST", "SCA-B.ST",
-	"SCV-B.ST", "SEB-A.ST", "SECU-B.ST", "SKA-B.ST", "SKF-B.ST", "SSAB-A.ST", "SHB-A.ST", "SWED-A.ST", "SWMA.ST",
-	"TEL2-B.ST", "TLSN.ST", "VOLV-B.ST")  
+mySymbols<-scan('SymbolsYahoo.csv', what=character())
 
 # Load the data from disk
 #myData<-readSeries('data/omxs30_10Years.csv', sep=',')
@@ -16,6 +12,7 @@ mySymbols<-c("ABB.ST", "ALFA.ST", "ASSA-B.ST", "AZN.ST", "ATCO-A.ST", "ATCO-B.ST
 
 # Load the data online
 myData<-fetchData(mySymbols, 365)
+a<-myData
 myData<-removeNA(Cl(myData))
 #myReturns<-returns(Cl(myData))
 

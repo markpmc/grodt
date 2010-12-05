@@ -13,10 +13,15 @@ smaSignal<-function(x, params=c(30,100), burn=0, short=FALSE)
 	ret
 }
 
-# This should maybe be positive a longer time? Perhaps all the way until we hit 50?
-rsiPosition<-function(x, params=c(21, 30, 70), burn=0, short=FALSE)
+rsiSignal<-function(x, params=c(21, 30, 70))
 {
-	ret<-rsiSignal(x, params)
+	ret<-rep(0, length(x))
+	overSold<-params[2]
+	overBought<-params[3]
+	y<-RSI(x, params[1])
+	y[is.na(y)]<-50
+	ret[y<overSold]<-1
+	ret[y>overBought]<--1
 	ret
 }
 
@@ -52,24 +57,6 @@ bollingerSignal<-function(x, params=c(20, 2), burn=0, short=FALSE)
 	y<-BBands(x, n=params[1], sd=params[2])
 	ret[x>y[,"up"]]<-0
 	ret[x<y[,"dn"]]<-1
-	ret
-}
-
-# Not done, and not working. Need more work
-magicTTR<-function(x, params, burn=0, short=FALSE)
-{
-	ret<-rep(0, length(x))
-	smaShort<-30
-	smaLong<-100
-	rsiPar<-50
-	d<-smaLong-smaShort
-	xsmall<-x[-c(1:d)]
-	mySma<-SMA(xsmall, n=smaShort) - SMA(x, n=smaLong)
-	myMacd<-macd4(x[-c(1:(smaLong-1))])
-	myRsi<-RSI(x, 21)
-	myRsi<-myRsi[-c(1:(smaLong-1))]
-	inds<-intersect(intersect(which(mySma>0), which(myMacd>0)), which(myRsi<rsiPar))
-	ret[inds+d-1]<-1
 	ret
 }
 
