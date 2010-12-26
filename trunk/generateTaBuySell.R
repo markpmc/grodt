@@ -8,12 +8,12 @@ mySymbols<-scan('SymbolsYahoo.csv', what=character())
 
 # Load the data from disk
 #myData<-readSeries('data/omxs30_10Years.csv', sep=',')
-#myData<-removeNA(Cl(myData))
 
-# Load the data online
+# Load the data online and remove missing values
 myData<-fetchData(mySymbols, 365)
-#a<-myData
-myData<-Cl(myData)
+myData<-removeNA(myData)
+myClose<-Cl(myData)
+myVolume<-Vo(myData)
 
 # Analyze the data
 colNames<-gsub(".Close", "", colnames(myData))
