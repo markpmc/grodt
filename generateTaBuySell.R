@@ -11,7 +11,7 @@ mySymbols<-scan('SymbolsYahoo.csv', what=character())
 #myData<-removeNA(Cl(myData))
 
 # Load the data online
-#myData<-fetchData(mySymbols, 365)
+myData<-fetchData(mySymbols, 365)
 #a<-myData
 myData<-Cl(myData)
 
