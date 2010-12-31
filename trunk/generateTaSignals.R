@@ -1,5 +1,4 @@
 require(ttrTests)
-source('taSignals.R')
 
 # All of these TTR functions should return positions, i.e., return 1 as long as we are on a buy signal. Not just when the signal is issued.
 
@@ -13,15 +12,16 @@ smaSignal<-function(x, params=c(30,100), burn=0, short=FALSE)
 	ret
 }
 
-rsiSignal<-function(x, params=c(21, 30, 70))
+rsiSignal<-function(x, params=c(21, 30, 70), burn=0, short=FALSE)
 {
-	ret<-rep(0, length(x))
+	stock<-x[!is.na(x)]
+	ret<-rep(0, length(stock))
 	overSold<-params[2]
 	overBought<-params[3]
-	y<-RSI(x, params[1])
+	y<-RSI(stock, params[1])
 	y[is.na(y)]<-50
 	ret[y<overSold]<-1
-	ret[y>overBought]<--1
+	ret[y>overBought]<-ifelse(short==FALSE, 0, -1)
 	ret
 }
 
@@ -39,6 +39,8 @@ rsiSignal2<-function(x, params=c(21, 30, 70, 7), burn=0, short=FALSE)
 	for(i in inds) ret[seq(i,(i+params[4]))]<-1
 	ret
 }
+
+#rsiSignalWithMomentum<-function(x, params=c(21, 30, 70, 7), burn=0, short=FALSE)
 
 macdSignal<-function(x, params=c(12, 26, 9), burn=0, short=FALSE)
 {
@@ -60,4 +62,11 @@ bollingerSignal<-function(x, params=c(20, 2), burn=0, short=FALSE)
 	ret
 }
 
-
+momentumSignal<-function(x, params=c(10), burn=0, short=FALSE)
+{
+	ret<-rep(0, length(x))
+	y<-momentum(x, params[1])
+	ret[y>0]<-1
+	ret[y<0]<-ifelse(short==FALSE,0,-1)
+	ret
+}
