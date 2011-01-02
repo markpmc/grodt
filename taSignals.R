@@ -40,7 +40,39 @@ rsiSignal2<-function(x, params=c(21, 30, 70, 7), burn=0, short=FALSE)
 	ret
 }
 
-#rsiSignalWithMomentum<-function(x, params=c(21, 30, 70, 7), burn=0, short=FALSE)
+# This tries to combine the rsi with the momentum. If a buy signal is issued in momentum 
+# check backwards n steps to see if an rsi buy signal has already been issued. If so a buy signal is issued
+rsiSignalWithMomentum<-function(x, params=c(12, 30, 70, 12, 10), burn=0, short=FALSE)
+{
+	lagParam<-params[5]
+	momParam<-params[4]
+	rsiParams<-params[1:3]
+	
+	momIndicator<-momentumSignal(x, momParam, burn, short)
+	rsiIndicator<-rsiSignal(x, rsiParams, burn, short)
+	resIndicator<-rep(0, length(momIndicator))
+	
+	# Sanity check
+	stopifnot(length(momIndicator) == length(rsiIndicator))
+	
+	# Buy signals
+	momBuyInds<-which(momIndicator>0)
+	for(i in momBuyInds){
+		startInd<-ifelse(i-lagParam > 0, i-lagParam, 1)
+		if(any(rsiIndicator[startInd:i] > 0))
+			resIndicator[i]<-1
+	}
+	
+	# Sell signals
+	momSellInds<-which(momIndicator<1)
+	for(i in momSellInds){
+		startInd<-ifelse(i-lagParam > 0, i-lagParam, 1)
+		if(any(rsiIndicator[startInd:i] < 1))
+			resIndicator[i]<-ifelse(short==FALSE, 0, -1)
+	}
+	
+	resIndicator
+}
 
 macdSignal<-function(x, params=c(12, 26, 9), burn=0, short=FALSE)
 {
