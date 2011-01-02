@@ -15,9 +15,9 @@ source('taSignals.R')
 source('dataImportUtility.R')
 
 mydata<-readSeries('data/omxs30_10Years.csv', sep=',')
-mydata<-removeNA(Cl(mydata))
+myclose<-removeNA(Cl(mydata))
 
-stock<-mydata[, "AZN.ST.Close"]
+stock<-myclose[, "AZN.ST.Close"]
 stock<-as.xts(stock)
 #stock<-as.xts(stock[300:400])
 plotSignal(stock, diff(rsiSignal(stock, params=c(21,30,70))))
