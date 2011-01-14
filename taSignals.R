@@ -55,20 +55,30 @@ rsiSignalWithMomentum<-function(x, params=c(12, 30, 70, 12, 10), burn=0, short=F
 	# Sanity check
 	stopifnot(length(momIndicator) == length(rsiIndicator))
 	
-	# Buy signals
-	momBuyInds<-which(momIndicator>0)
-	for(i in momBuyInds){
-		startInd<-ifelse(i-lagParam > 0, i-lagParam, 1)
-		if(any(rsiIndicator[startInd:i] > 0))
-			resIndicator[i]<-1
-	}
+	currentSignal<-factor("Neutral", levels=c("Buy", "Sell", "Neutral"))
 	
-	# Sell signals
-	momSellInds<-which(momIndicator<1)
-	for(i in momSellInds){
+	i<-1
+	while(i<=length(rsiIndicator))
+	{
 		startInd<-ifelse(i-lagParam > 0, i-lagParam, 1)
-		if(any(rsiIndicator[startInd:i] < 1))
-			resIndicator[i]<-ifelse(short==FALSE, 0, -1)
+		if(momIndicator[i]>0){
+			if(currentSignal=="Buy"){
+				resIndicator[i]<-1
+				next
+			}else if(any(rsiIndicator[startInd:i] > 0)){
+				resIndicator[i]<-1
+				currentSignal[1]<-"Buy"
+			}
+		}else{
+			if(currentSignal=="Sell"){
+				resIndicator[i]<-0
+				next
+			}else if(any(rsiIndicator[startInd:i] <= 0)){
+				resIndicator[i]<-0
+				currentSignal<-"Sell"
+			}
+		}
+		i<-i+1
 	}
 	
 	resIndicator
