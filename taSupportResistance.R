@@ -63,9 +63,11 @@ addTrendLine = function(stock, coefs)
 }
 
 # A lookback value of 10 seems to work ok for 1 year data
+# Figure out why this does not work with OHLC data..
 plotChartAndTrendLines = function(stock, lookBack)
 {
 	chartSeries(stock)
+	stock<-Cl(stock)
 	upTl<-estimateTrendLine(stock, lookBack, "upper")
 	loTl<-estimateTrendLine(stock, lookBack, "lower")
 	addTrendLine(stock, coef(upTl))
@@ -74,7 +76,7 @@ plotChartAndTrendLines = function(stock, lookBack)
 	#abline(v=identifyLocalMinima(stock, 10), col='blue')
 }
 
-stockOhlc<-fetchData('SWED-A.ST', 700)
+stockOhlc<-fetchData('SWED-A.ST', 200)
 stock<-Cl(stockOhlc)
 #chartSeries(stockOhlc, log.scale=TRUE)
 #abline(h=getSupportResistanceLines(stock, 4), col='red')
