@@ -1,5 +1,6 @@
-require(fTrading)
 require(TTR)
+require(quantmod)
+require(fTrading)
 
 source('dataImportUtility.R')
 source('taSignals.R')
@@ -7,7 +8,7 @@ source('taSignals.R')
 mySymbols<-scan('SymbolsYahoo.csv', what=character())
 
 # Load the data
-myData<-readSeries('data/data_1year_yahoo_symbols.csv', sep=',')
+#myData<-readSeries('data/data_1year_yahoo_symbols.csv', sep=',')
 #myData<-fetchData(mySymbols, 365)
 
 # Remove missing values
@@ -29,27 +30,15 @@ for(i in 1:nCols){
 	if(nrow(closePrices)==0) next
 	
 	# RSI
-	rsiIndicator<-last(rsiTA(closePrices, 21), nDays)
-	rsiBuySell<-"Sell"
-	if(rsiIndicator >= 40 && rsiIndicator <= 60) rsiBuySell<-"Neutral"
-	if(rsiIndicator <= 30) rsiBuySell<-"Buy"
-	
+	rsiIndicator<-last(rsiTA(closePrices, 21), nDays)		
 	# MACD
 	macdIndicator<-last(cdoTA(closePrices, 12, 26, 9), nDays)
-	macdBuySell<-"Sell"
-	if(macdIndicator > 0) macdBuySell<-"Buy"
-	
 	# SMA
-	smaIndicator<-last(SMA(closePrices, 10) - SMA(closePrices, 25), nDays)
-	smaBuySell<-"Sell"
-	if(smaIndicator>0) smaBuySell<-"Buy"
-	
+	smaIndicator<-last(TTR::SMA(closePrices, 10) - TTR::SMA(closePrices, 25), nDays)
 	# Momentum (ROC)
 	momIndicator<-last(rocTA(closePrices, 5), nDays)
-	
 	# Volatility
 	volIndicator<-last(TTR::volatility(ohlcPrices, n=22), nDays)
-	
 	# Liquidity risk
 	liqRisk<-last(liq, nDays)
 	
