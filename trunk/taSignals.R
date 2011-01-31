@@ -64,7 +64,6 @@ rsiSignalWithMomentum<-function(x, params=c(12, 30, 70, 12, 10), burn=0, short=F
 		if(momIndicator[i]>0){
 			if(currentSignal=="Buy"){
 				resIndicator[i]<-1
-				next
 			}else if(any(rsiIndicator[startInd:i] > 0)){
 				resIndicator[i]<-1
 				currentSignal[1]<-"Buy"
@@ -72,7 +71,6 @@ rsiSignalWithMomentum<-function(x, params=c(12, 30, 70, 12, 10), burn=0, short=F
 		}else{
 			if(currentSignal=="Sell"){
 				resIndicator[i]<-0
-				next
 			}else if(any(rsiIndicator[startInd:i] <= 0)){
 				resIndicator[i]<-0
 				currentSignal<-"Sell"

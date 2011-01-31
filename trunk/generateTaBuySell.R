@@ -9,7 +9,7 @@ mySymbols<-scan('SymbolsYahoo.csv', what=character())
 
 # Load the data
 #myData<-readSeries('data/data_1year_yahoo_symbols.csv', sep=',')
-#myData<-fetchData(mySymbols, 365)
+myData<-fetchData(mySymbols, 365)
 
 # Remove missing values
 myData<-removeNA(myData)
