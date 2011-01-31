@@ -24,6 +24,7 @@ plotSignal(stock, diff(rsiSignal(stock, params=c(21,30,70))))
 #plotSignal(stock, diff(macdSignal(stock, params=c(30,100,15))))
 #plotSignal(stock, diff(smaSignal(stock, params=c(30,100))))
 #plotSignal(stock, diff(bollingerSignal(stock, params=c(20,2))))
+plotSignal(stock, diff(rsiSignalWithMomentum(stock, params=c(12,30,70,12,10))))
 
 # Check statistical validity this function requires a vector or a timeSeries with "Close" attribute
-returnStats(as.vector(stock), ttr=rsiSignal2, params=c(21, 35, 70, 1))
+returnStats(as.vector(stock), ttr=rsiSignalWithMomentum, params=c(12, 30, 70, 12, 10))
