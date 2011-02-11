@@ -44,7 +44,12 @@ lmfit<-lm(Y ~ ., data=myDataset, subset=subInds)
 
 # Fitted vs. Predicted
 fitPredDf<-data.frame(Target=myDataset[subInds, 1], Predicted=predict(lmfit2))
-predSingDf<-data.frame(Target=myDataset[, 1], Predicted=predict(lmfit2, new=myDataset))
+predSingDf<-data.frame(Target=myDataset[, 1], Predicted=predict(lmfit2, newdata=myDataset))
 predIteratedDf<-iteratedPredict(lmfit2, myCl, 0, c(1:20))
 
 # Neural network
+myScaled<-scale(myDataset)
+nnetfit<-nnet(Y~., data=myScaled, size=20, linout=TRUE, subset=subInds, decay=0.0)
+nnFitPredDf<-data.frame(Target=as.data.frame(myScaled)[subInds, 1], Predicted=predict(nnetfit))
+nnFitSingDf<-data.frame(Target=as.data.frame(myScaled)[, 1], Predicted=predict(nnetfit, newdata=myScaled))
+predIteratedDf<-iteratedPredict(nnetfit, scale(as.data.frame(myCl)), 0, c(1:20))
