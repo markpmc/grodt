@@ -6,8 +6,9 @@ fetchData<-function(stocks, ndays=365, freq="daily")
 	myData<-c()
 	for(symbol in stocks)
 	{
-		tmp<-yahooSeries(symbol, nDaysBack=ndays, frequency=freq)
-		myData<-cbind(myData, tmp)
+		tmp<-0
+		try(tmp<-yahooSeries(symbol, nDaysBack=ndays, frequency=freq))
+		if(is.timeSeries(tmp)) myData<-cbind(myData, tmp)
 		Sys.sleep(1)
 	}
 	colnames(myData)<-gsub(".Adj.Close", ".Adjusted", colnames(myData))
