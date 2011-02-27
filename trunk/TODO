@@ -11,3 +11,4 @@
   	0.001-0.10 mill euro/dollar         Hög
   	under 0.001 mill euro/dollar        Extrem
 * Fix the import of data from file so that you can import only specific symbols
+* Add the ADR technical indicator. Seems very promising
