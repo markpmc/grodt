@@ -6,7 +6,6 @@ mySymbols<-scan('SymbolsYahoo.csv', what=character())
 
 # Load the data from disk
 #myData<-readSeries('data/omxs30_10Years.csv', sep=',')
-
 # Load the data online
 myData<-fetchData(mySymbols, 365)
 
