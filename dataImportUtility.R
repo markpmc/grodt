@@ -1,5 +1,11 @@
 require(fImport)
 
+fixColnames<-function(mydat)
+{
+	colnames(mydat)<-gsub(".Adj.Close", ".Adjusted", colnames(mydat))
+	mydat
+}
+
 # Fetch the data from yahooImport
 fetchData<-function(stocks, ndays=365, freq="daily")
 {

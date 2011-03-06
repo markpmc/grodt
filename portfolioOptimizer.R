@@ -3,7 +3,8 @@ require(quantmod)
 
 source('dataImportUtility.R')
 
-mySymbols<-c('eric-b.st', 'msft', 'noki-sek.st', 'par-sek.st')
+mySymbols<-c('jm.st', 'hm.st', 'noki-sek.st', 'par-sek.st')
+mySymbols<-scan('SymbolsYahoo.csv', what=character())
 
 # Load the data
 myData<-fetchData(mySymbols, 365, "daily")
