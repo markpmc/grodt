@@ -5,7 +5,9 @@ getSupportResistanceLines<-function(stock, howmany=3)
 {
 	a<-hist(stock, plot=FALSE)
 	prices<-a$mids[order(a$counts)]
-	ret<-prices[(length(prices)-howmany+1):length(prices)]
+	n<-length(prices)
+	if(howmany > n) howmany<-n
+	ret<-prices[(n-howmany+1):n]
 	ret
 }
 
@@ -43,6 +45,18 @@ estimateTrendLine<-function(stock, lookBack, type="upper")
 	lm(Y~X, data=data.frame(Y=y, X=x))
 }
 
+getSupportResistanceLinesV2<-function(stock, lookBack=4, n=2)
+{
+	#mins<-kmeans(stock[identifyLocalMinima(stock, lookBack)], n)$centers
+	#maxs<-kmeans(stock[identifyLocalMaxima(stock, lookBack)], n)$centers
+	mins<-stock[identifyLocalMinima(stock, lookBack)]
+	maxs<-stock[identifyLocalMaxima(stock, lookBack)]
+	ret<-kmeans(union(mins, maxs), n)$centers
+	
+	#ret<-union(mins, maxs)
+	ret
+}
+
 addVLine = function(dtlist)
 {
 	plot(addTA(xts( rep(TRUE, NROW(dtlist)), dtlist), on=1, col="#333333"))
@@ -76,7 +90,7 @@ plotChartAndTrendLines = function(stock, lookBack)
 	#abline(v=identifyLocalMinima(stock, 10), col='blue')
 }
 
-stockOhlc<-fetchData('SWED-A.ST', 200)
+stockOhlc<-fetchData('SKA-B.ST', 365)
 stock<-Cl(stockOhlc)
 #chartSeries(stockOhlc, log.scale=TRUE)
 #abline(h=getSupportResistanceLines(stock, 4), col='red')
