@@ -90,7 +90,7 @@ plotChartAndTrendLines = function(stock, lookBack)
 	#abline(v=identifyLocalMinima(stock, 10), col='blue')
 }
 
-stockOhlc<-fetchData('SKA-B.ST', 365)
+stockOhlc<-fetchData('MEKO.ST', 500)
 stock<-Cl(stockOhlc)
 #chartSeries(stockOhlc, log.scale=TRUE)
 #abline(h=getSupportResistanceLines(stock, 4), col='red')
