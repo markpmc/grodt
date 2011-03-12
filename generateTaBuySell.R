@@ -9,7 +9,7 @@ mySymbols<-scan('SymbolsYahoo.csv', what=character())
 
 # Load the data
 #myData<-readSeries('data/data_1year_yahoo_symbols.csv', sep=',')
-myData<-fetchData(mySymbols, 100)
+myData<-fetchData(mySymbols, 365)
 
 # Remove missing values
 myData<-removeNA(myData)
@@ -34,9 +34,9 @@ for(i in 1:nCols){
 	# MACD
 	macdIndicator<-last(cdoTA(closePrices, 12, 26, 9), nDays)
 	# SMA
-	smaIndicator<-last(TTR::SMA(closePrices, 10) - TTR::SMA(closePrices, 25), nDays)
+	smaIndicator<-last(TTR::SMA(closePrices, 30) - TTR::SMA(closePrices, 100), nDays)
 	# Momentum (ROC)
-	momIndicator<-last(rocTA(closePrices, 5), nDays)
+	momIndicator<-last(rocTA(closePrices, 10), nDays)
 	# Volatility
 	volIndicator<-last(TTR::volatility(ohlcPrices, n=22), nDays)
 	# Liquidity risk
