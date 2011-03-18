@@ -3,7 +3,6 @@ require(nnet)
 
 source('dataImportUtility.R')
 
-
 createFakeDataSet<-function(initvals, betas)
 {
 	ret<-initvals
@@ -40,7 +39,7 @@ plotPredicted<-function(df)
 }
 
 # Fetch and process data
-#myData<-fetchData('jm.st', 1000)
+myData<-fetchData('jm.st', 1000)
 myCl<-Cl(myData)
 testlags<-c(1:20)
 myDataset<-data.frame(lag(myCl, k=c(0,testlags)))
