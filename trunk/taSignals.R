@@ -40,6 +40,33 @@ rsiSignal2<-function(x, params=c(21, 30, 70, 7), burn=0, short=FALSE)
 	ret
 }
 
+# Experimental rsi testing if buying on the way up from 30 and selling on the way down from 70
+# A position is hold for no more than the fourth parameter days
+rsiSignal3<-function(x, params=c(21, 30, 70, 4), burn=0, short=FALSE)
+{
+	ret<-rep(0, length(x))
+	overSold<-params[2]
+	overBought<-params[3]
+	numDaysKeep<-params[4]
+	y<-RSI(x, params[1])
+	y[is.na(y)]<-50
+	same<-0
+	for(i in 2:length(y)){
+		if(same <= numDaysKeep){
+			ret[i]<-ret[i-1]
+			same<-same+1
+		}
+		else same<-0
+		if(y[i-1] >= overBought){
+			if(y[i] < overBought) ret[i] <- -1
+		}else if(y[i-1]<= overSold){
+			if(y[i] > overSold) ret[i] <- 1
+		}
+	}
+	if(!short) ret[which(ret<0)]<-0
+	ret
+}
+
 # This tries to combine the rsi with the momentum. If a buy signal is issued in momentum 
 # check backwards n steps to see if an rsi buy signal has already been issued. If so a buy signal is issued
 rsiSignalWithMomentum<-function(x, params=c(12, 30, 70, 12, 10), burn=0, short=FALSE)

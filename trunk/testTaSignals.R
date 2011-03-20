@@ -7,8 +7,19 @@ plotSignal<-function(x, signal)
 {
 	#chartSeries(x, TA=c(addMACD(30,100,15),addBBands(),addRSI(21)))
 	chartSeries(x, TA=c(addBBands(),addRSI(21),addMomentum(10)))
-	#abline(v=which(signal<0), col="red")
+	abline(v=which(signal<0), col="red")
 	abline(v=which(signal>0), col="green", lty="dotted")
+}
+
+generateRsiChart<-function(stock, interval=c(1:30))
+{
+	mylist<-list()
+	for(i in interval){
+		rets<-returns(stock, method="discrete")
+		inds<-which(rsiSignal3(stock, params=c(21,30,70,i))>0)
+		mylist<-c(mylist, list(rets[inds]))
+	}
+	mylist
 }
 
 source('taSignals.R')
@@ -19,12 +30,12 @@ myclose<-removeNA(Cl(mydata))
 
 stock<-myclose[, "AZN.ST.Close"]
 stock<-as.xts(stock)
-#stock<-as.xts(stock[300:400])
-plotSignal(stock, diff(rsiSignal(stock, params=c(21,30,70))))
+plotSignal(stock, diff(rsiSignal3(stock, params=c(21,30,70,4))))
+#plotSignal(stock, diff(rsiSignal2(stock, params=c(21,30,70,4))))
 #plotSignal(stock, diff(macdSignal(stock, params=c(30,100,15))))
 #plotSignal(stock, diff(smaSignal(stock, params=c(30,100))))
 #plotSignal(stock, diff(bollingerSignal(stock, params=c(20,2))))
-plotSignal(stock, diff(rsiSignalWithMomentum(stock, params=c(12,30,70,12,10))))
+#plotSignal(stock, diff(rsiSignalWithMomentum(stock, params=c(12,30,70,12,10))))
 
 # Check statistical validity this function requires a vector or a timeSeries with "Close" attribute
 returnStats(as.vector(stock), ttr=rsiSignalWithMomentum, params=c(12, 30, 70, 12, 10))
