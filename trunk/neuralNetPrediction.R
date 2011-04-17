@@ -34,18 +34,34 @@ iteratedPredict<-function(model, obs, lags)
 
 plotPredicted<-function(df)
 {
-	plot(df$Target, type='l')
+	plot(df$Target, type='l', ylab="Aktiekurs", xlab="Dag")
 	lines(df$Predicted, type='l', col='red')
+}
+
+createTimeLaggedDataSet<-function(x, lags)
+{
+	mydf<-data.frame(lag(myCl, k=c(0,lags)))
+	colnames(mydf)<-c("Y", paste("X", lags, sep=""))
+	mydf<-mydf[-lags, ]
+	mydf
+}
+
+predictIt<-function(x, lags, coefs)
+{
+	stopifnot(max(lags)<length(x))
+	b<-numeric(400+length(x)+1)
+	b[1:length(x)]<-x
+	for(i in (length(x)+1):length(b)){
+		b[i]<-c(1,b[i-lags])%*%coefs
+	}
+	b
 }
 
 # Fetch and process data
 myData<-fetchData('jm.st', 1000)
 myCl<-Cl(myData)
 testlags<-c(1:20)
-myDataset<-data.frame(lag(myCl, k=c(0,testlags)))
-colnames(myDataset)<-c("Y", paste("X", testlags, sep=""))
-myDataset<-myDataset[-testlags, ]
-
+myDataset<-createTimeLaggedDataSet(myCl, testlags)
 
 # Build a model
 trainInds<-c(1:200)
