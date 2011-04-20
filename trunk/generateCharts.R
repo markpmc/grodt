@@ -9,5 +9,6 @@ myData<-fetchData(mySymbols, 360)
 generateCharts(mySymbols, myData, path="charts/")
 
 # Screen all the stocks
-myScreen<-taScreenerValues(mySymbols, myData)
+myScreenV<-taScreenerValues(mySymbols, myData)
+myScreenS<-taScreenerSignal(mySymbols, myData)
 

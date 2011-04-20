@@ -20,3 +20,11 @@ findDownUpDistributions<-function(x)
 	list(Pos=pos, Neg=neg)
 }
 
+# Find all NA and do a linear interpolation of them
+interpolateNA<-function(x)
+{
+	inds<-which(is.na(x))
+	x[inds]<-approx(x, xout=inds)$y
+	x
+}
+

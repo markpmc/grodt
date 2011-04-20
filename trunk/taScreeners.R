@@ -2,22 +2,20 @@ taScreenerValues<-function(symbols, mydata)
 {
 	require(TTR)
 	require(quantmod)	
-	# Remove missing values
-	myData<-removeNA(mydata)
-	myClose<-Ad(myData)
-	myVolume<-Vo(myData)
 
 	# Analyze the data
-	colNames<-gsub(".Adjusted", "", colnames(myClose))
-	nCols<-ncol(myClose)
+	colNames<-gsub(".Close", "", colnames(Cl(mydata)))
+	nCols<-length(colNames)
 	stockTaData<-data.frame(Symbol=character(nCols), RSI=numeric(nCols), MACD=numeric(nCols), SMA=numeric(nCols), MOM=numeric(nCols),
 	Volatility=numeric(nCols), Liquidity=numeric(nCols), Interesting=character(nCols), stringsAsFactors=FALSE)
 
 	for(i in 1:nCols){
-		ohlcPrices<-myData[, grep(colNames[i], colnames(myData))]
-		liq<-myVolume[, grep(colNames[i], colnames(myVolume))]
-		closePrices<-myClose[, i]
-		closePrices<-removeNA(closePrices)
+		ohlcPrices<-mydata[, grep(colNames[i], colnames(mydata))]
+		error<-try(ohlcPrices<-interpNA(ohlcPrices)) # Interpolate possible points
+		error<-try(ohlcPrices<-removeNA(ohlcPrices)) # Remove trailing and starting NA's
+		if(class(error)=="try-error") next
+		liq<-Vo(ohlcPrices)
+		closePrices<-Ad(ohlcPrices)
 		if(nrow(closePrices)==0) next
 		
 		# RSI
