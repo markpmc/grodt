@@ -31,3 +31,14 @@ removeNA<-function(data)
 	if(length(na.row) > 0) x<-x[!na.row, ]
 	x
 }
+
+fetchEuroInvestorData<-function(symbols)
+{
+	left<-"http://www.euroinvestor.dk/HistoricalQuotes/HistoricalQuotes.aspx?lang=DA&fn="
+	right<-"&outputmode=5&format=csv&separator=;"
+	for(i in symbols){
+		mystr<-paste(left, i, right, sep="")
+		outfile<-paste("EURO_", i, ".csv", sep="")
+		download.file(mystr, outfile)
+	}
+}
