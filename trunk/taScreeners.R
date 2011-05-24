@@ -14,6 +14,7 @@ taScreenerValues<-function(symbols, mydata)
 		error<-try(ohlcPrices<-interpNA(ohlcPrices)) # Interpolate possible points
 		error<-try(ohlcPrices<-removeNA(ohlcPrices)) # Remove trailing and starting NA's
 		if(class(error)=="try-error") next
+		ohlcPrices<-as.xts(ohlcPrices)
 		liq<-Vo(ohlcPrices)
 		closePrices<-Ad(ohlcPrices)
 		if(nrow(closePrices)==0) next
@@ -22,6 +23,7 @@ taScreenerValues<-function(symbols, mydata)
 		rsiIndicator<-last(RSI(closePrices, 21))
 		# MACD
 		macdIndicator<-last(MACD(closePrices, 12, 26, 9))
+		macdIndicator<-macdIndicator[, "macd"]-macdIndicator[, "signal"]
 		# SMA
 		smaIndicator<-last(TTR::SMA(closePrices, 30) - TTR::SMA(closePrices, 100))
 		# Momentum (ROC)
@@ -30,7 +32,6 @@ taScreenerValues<-function(symbols, mydata)
 		volIndicator<-last(TTR::volatility(ohlcPrices, n=22))
 		# Liquidity risk
 		liqRisk<-last(liq)
-	
 		interesting<-"No"
 		if(rsiIndicator <= 30 || rsiIndicator >= 70) interesting<-"Yes"
 		stockTaData[i,]<-data.frame(Symbol=as.character(colNames[i]), RSI=rsiIndicator, MACD=macdIndicator, 
