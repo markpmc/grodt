@@ -170,12 +170,15 @@ rsiWithMoneyManagement<-function(x, params=c(21, 30, 70), burn=0, short=FALSE)
 		}else{
 			ret[i]<-0
 			if(myrsi[i] <= 30){
-				entryPrice<-stock[i]
-				stopLoss<-entryPrice*0.95
-				stopGain<-entryPrice*1.10
+				entryPrice<-as.numeric(stock[i])
+				stopLoss<-entryPrice*0.97
+				stopGain<-entryPrice*1.20
 				havePosition<-TRUE
-			}		
+			}
+			#cat("Buying\n")
+			#browser()	
 		}
+		#if(i>390) browser()
 	}
 	ret
 }
