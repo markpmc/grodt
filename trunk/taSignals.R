@@ -138,7 +138,7 @@ momentumSignal<-function(x, params=c(10), burn=0, short=FALSE)
 	ret
 }
 
-# Theck the stop loss function. Does not really work.
+# Theck the stop loss function. Works ok but I should probably use a trailing StopLoss instead of a stopGain?
 rsiWithMoneyManagement<-function(x, params=c(21, 30, 70), burn=0, short=FALSE)
 {
 	stock<-x[!is.na(x)]
