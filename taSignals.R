@@ -137,3 +137,45 @@ momentumSignal<-function(x, params=c(10), burn=0, short=FALSE)
 	ret[y<0]<-ifelse(short==FALSE,0,-1)
 	ret
 }
+
+# Theck the stop loss function. Does not really work.
+rsiWithMoneyManagement<-function(x, params=c(21, 30, 70), burn=0, short=FALSE)
+{
+	stock<-x[!is.na(x)]
+	ret<-rep(0, length(stock))
+	
+	#Buy/Sell signals (could in principle be modular)
+	mysignals<-rsiSignal(x, params)
+	stopifnot(length(mysignals)==length(stock))
+	myrsi<-RSI(stock, params[1])
+	myrsi[is.na(myrsi)]<-50
+	
+	# Position status
+	havePosition<-FALSE
+	entryPrice<--1 # The entry price for the trade
+	stopLoss<--1 # The Stop Loss price
+	stopGain<--1 # The Stop Profit price
+	delayCntr<-0 # Used to stop buy signal within 10 days of a stop loss
+	
+	for(i in 1:length(ret)){
+		if(delayCntr > 0){
+			ret[i]<-0
+			delayCntr<-delayCntr-1
+		}else if(havePosition){
+			ret[i]<-1
+			if(any(stock[i] < stopLoss, stock[i] > stopGain, myrsi[i] >= 70)){
+				havePosition<-FALSE
+				delayCntr<-10
+			}
+		}else{
+			ret[i]<-0
+			if(myrsi[i] <= 30){
+				entryPrice<-stock[i]
+				stopLoss<-entryPrice*0.95
+				stopGain<-entryPrice*1.10
+				havePosition<-TRUE
+			}		
+		}
+	}
+	ret
+}
