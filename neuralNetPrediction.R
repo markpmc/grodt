@@ -2,6 +2,7 @@ require(quantmod)
 require(nnet)
 
 source('dataImportUtility.R')
+source('dataUtility.R')
 
 createFakeDataSet<-function(initvals, betas)
 {
@@ -36,14 +37,6 @@ plotPredicted<-function(df)
 {
 	plot(df$Target, type='l', ylab="Aktiekurs", xlab="Dag")
 	lines(df$Predicted, type='l', col='red')
-}
-
-createTimeLaggedDataSet<-function(x, lags)
-{
-	mydf<-data.frame(lag(myCl, k=c(0,lags)))
-	colnames(mydf)<-c("Y", paste("X", lags, sep=""))
-	mydf<-mydf[-lags, ]
-	mydf
 }
 
 predictIt<-function(x, lags, coefs)

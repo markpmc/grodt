@@ -28,3 +28,11 @@ interpolateNA<-function(x)
 	x
 }
 
+# Create a time lagged dataset for autoregressive prediction
+createTimeLaggedDataSet<-function(x, lags)
+{
+	mydf<-data.frame(lag(x, k=c(0,lags)))
+	colnames(mydf)<-c("Y", paste("X", lags, sep=""))
+	mydf<-mydf[-lags, ]
+	mydf
+}

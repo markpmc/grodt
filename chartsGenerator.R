@@ -1,4 +1,5 @@
 source('dataImportUtility.R')
+require(quantmod)
 
 generateChart<-function(stock, fname)
 {
