@@ -42,3 +42,9 @@ fetchEuroInvestorData<-function(symbols)
 		download.file(mystr, outfile)
 	}
 }
+
+readAndParseNordnetKeyFigures<-function(fname, numyears=5)
+{
+	myColClasses<-c("character", rep("numeric", numyears))
+	a<-read.table(fname, sep="\t", dec=",", skip=1, header=TRUE, colClasses=myColClasses)
+}
