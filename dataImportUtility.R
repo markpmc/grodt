@@ -46,5 +46,14 @@ fetchEuroInvestorData<-function(symbols)
 readAndParseNordnetKeyFigures<-function(fname, numyears=5)
 {
 	myColClasses<-c("character", rep("numeric", numyears))
-	a<-read.table(fname, sep="\t", dec=",", skip=1, header=TRUE, colClasses=myColClasses)
+	a<-read.table(fname, sep="\t", dec=",", skip=1, header=TRUE, row.names=1, colClasses=myColClasses)
+	egetKapital<-a[grep("Eget kapital", rownames(a)), ]
+	antalAktier<-a[grep("Antal aktier", rownames(a)), ]
+	resultatPerAktie<-a[grep("Resultat per aktie", rownames(a)), ]
+	substansVarde<-egetKapital/antalAktier*1000
+	tillvaxt<-cbind(resultatPerAktie[1, -numyears]/resultatPerAktie[1,-1], NA)
+	colnames(tillvaxt)<-colnames(a)
+	#a<-rbind(a, SubstansVärde=substansVarde)
+	ret<-rbind(ResultatPerAktie=resultatPerAktie, SubstansVärde=substansVarde, Tillväxt=tillvaxt)
+	ret
 }
