@@ -54,6 +54,6 @@ readAndParseNordnetKeyFigures<-function(fname, numyears=5)
 	tillvaxt<-cbind(resultatPerAktie[1, -numyears]/resultatPerAktie[1,-1], NA)
 	colnames(tillvaxt)<-colnames(a)
 	#a<-rbind(a, SubstansVärde=substansVarde)
-	ret<-rbind(ResultatPerAktie=resultatPerAktie, SubstansVärde=substansVarde, Tillväxt=tillvaxt)
+	ret<-rbind(ResultatPerAktie=resultatPerAktie, SubstansVarde=substansVarde, Tillvaxt=tillvaxt)
 	ret
 }
