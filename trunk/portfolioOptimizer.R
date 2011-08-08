@@ -5,12 +5,17 @@ source('dataImportUtility.R')
 
 mySymbols<-c('jm.st', 'hm.st', 'noki-sek.st', 'par-sek.st')
 mySymbols<-scan('SymbolsYahoo.csv', what=character())
+mySymbols<-scan('OMXS30SymbolsYahoo.csv', what=character())
 
 # Load the data
 myData<-fetchData(mySymbols, 365, "daily")
-myData<-removeNA(Cl(myData))
+myData<-Cl(myData)
+colnames(myData)<-gsub(".Close", "", colnames(myData))
+myData<-apply(myData, 2, interpolateNA)
+myData<-removeNA(myData)
 
-myReturns<-returns(Cl(myData))
+# Get the returns
+myReturns<-returns(myData)
 
 # Settings for the portfolio optimizer
 Spec = portfolioSpec()

@@ -20,11 +20,24 @@ findDownUpDistributions<-function(x)
 	list(Pos=pos, Neg=neg)
 }
 
+
 # Find all NA and do a linear interpolation of them
 interpolateNA<-function(x)
 {
+	stopifnot(any(is.data.frame(x), is.xts(x), is.matrix(x)))
 	inds<-which(is.na(x))
 	if(length(inds)>0) try({x[inds]<-approx(x, xout=inds)$y})
+	x
+}
+
+# This removes columns if all rows in that column is NA. It removes a row if any column in that row is NA.
+removeNA<-function(data)
+{
+	x<-data
+	na.col<-apply(is.na(x), 2, all)
+	if(length(na.col) > 0) x<-x[, !na.col]
+	na.row<-apply(is.na(x), 1, any)
+	if(length(na.row) > 0) x<-x[!na.row, ]
 	x
 }
 
