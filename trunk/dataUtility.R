@@ -24,7 +24,7 @@ findDownUpDistributions<-function(x)
 # Find all NA and do a linear interpolation of them
 interpolateNA<-function(x)
 {
-	stopifnot(any(is.data.frame(x), is.xts(x), is.matrix(x)))
+	#stopifnot(any(is.data.frame(x), is.xts(x), is.matrix(x)))
 	inds<-which(is.na(x))
 	if(length(inds)>0) try({x[inds]<-approx(x, xout=inds)$y})
 	x
