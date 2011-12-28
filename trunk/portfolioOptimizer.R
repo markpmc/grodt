@@ -17,29 +17,44 @@ getRollingWeights<-function(myret, Spec, Constraints)
 	myWeights
 }
 
-mySymbols<-c('jm.st', 'hm.st', 'noki-sek.st', 'par-sek.st')
-mySymbols<-scan('SymbolsYahoo.csv', what=character())
-mySymbols<-scan('OMXS30SymbolsYahoo.csv', what=character())
+# Fetch the stocks from OMXS30
+getSampleData<-function()
+{
+	mySymbols<-c('jm.st', 'hm.st', 'noki-sek.st', 'par-sek.st')
+	mySymbols<-scan('SymbolsYahoo.csv', what=character())
+	mySymbols<-scan('OMXS30SymbolsYahoo.csv', what=character())
 
-# Load the data
-#myData<-fetchData(mySymbols, 365, "daily")
-#myData<-Cl(myData)
-#colnames(myData)<-gsub(".Close", "", colnames(myData))
-#myData<-apply(myData, 2, interpolateNA)
-#myData<-removeNA(myData)
+	# Load the data
+	myData<-fetchData(mySymbols, 365, "daily")
+	myData<-Cl(myData)
+	colnames(myData)<-gsub(".Close", "", colnames(myData))
+	myData<-apply(myData, 2, interpolateNA)
+	myData<-removeNA(myData)
+	myData
+}
 
-# Get the returns
-myReturns<-returns(myData)
+# This is the portfolio optimizer part
+optimizePortfolio<-function(myData, mySpec=portfolioSpec(), myConstraints="LongOnly")
+{
+	# Get the returns
+	myReturns<-returns(myData)
 
-# Settings for the portfolio optimizer
-Spec = portfolioSpec()
-setTargetReturn(Spec) = mean(colMeans(myReturns))
-Constraints = "LongOnly"
+	# Settings for the portfolio optimizer
+	setTargetReturn(Spec) = mean(colMeans(myReturns))
 
-# Optimized portfolios
-#efport<-efficientPortfolio(myReturns, Spec, Constraints)
-#minvarport<-minvariancePortfolio(myReturns, Spec, Constraints)
-tanport<-tangencyPortfolio(myReturns, Spec, Constraints) # Generates the portfolio weigths with the optimal SharpRatio
-portfront<-portfolioFrontier(myReturns, Spec, Constraints)
+	# Optimized portfolios
+	#efport<-efficientPortfolio(myReturns, Spec, Constraints)
+	#minvarport<-minvariancePortfolio(myReturns, Spec, Constraints)
+	tanport<-tangencyPortfolio(myReturns, mySpec, myConstraints) # Generates the portfolio weigths with the optimal SharpRatio
+	portfront<-portfolioFrontier(myReturns, mySpec, myConstraints)
+	tanport
+}
 
-print(tanport)
+# Build and optimal portfolio from the OMXS30 stocks
+optimizeOMXS30<-function()
+{
+	myData<-getSampleData()
+	optport<-optimizePortfolio(myData)
+	optport
+}
+
