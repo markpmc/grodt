@@ -13,7 +13,7 @@ myxts<-apply(myxts, 2, interpolateNA)
 #myData<-readSeries('data/data_1year_yahoo_symbols.csv', sep=',')
 
 # Generate all charts from the symbols
-generateCharts(mySymbols, myxts, path="charts/")
+generateCharts(mySymbols, myxts, path="charts")
 
 # Screen all the stocks
 myScreenV<-taScreenerValues(mySymbols, myData)
