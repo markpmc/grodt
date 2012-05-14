@@ -1,3 +1,9 @@
+getStock<-function(name, data)
+{
+  ret<-data[,grep(name, colnames(data))]
+  ret
+}
+
 # Finds and stores the distribution of the number of consecutive ups and downs over the x period
 # x should typically be a log return series of a stock
 findDownUpDistributions<-function(x)
