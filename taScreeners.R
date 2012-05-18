@@ -10,11 +10,13 @@ taScreenerValues<-function(symbols, mydata)
 	Volatility=numeric(nCols), Liquidity=numeric(nCols), Interesting=character(nCols), stringsAsFactors=FALSE)
 
 	for(i in 1:nCols){
+	  print(colNames[i])
 		ohlcPrices<-mydata[, grep(colNames[i], colnames(mydata))]
 		error<-try(ohlcPrices<-interpNA(ohlcPrices)) # Interpolate possible points
 		error<-try(ohlcPrices<-removeNA(ohlcPrices)) # Remove trailing and starting NA's
 		if(class(error)=="try-error") next
     if(is.null(ohlcPrices)) next
+    if(dim(ohlcPrices)[1] < 101) next
 		ohlcPrices<-as.xts(ohlcPrices)
 		liq<-Vo(ohlcPrices)
 		closePrices<-Ad(ohlcPrices)
