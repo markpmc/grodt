@@ -14,6 +14,7 @@ taScreenerValues<-function(symbols, mydata)
 		error<-try(ohlcPrices<-interpNA(ohlcPrices)) # Interpolate possible points
 		error<-try(ohlcPrices<-removeNA(ohlcPrices)) # Remove trailing and starting NA's
 		if(class(error)=="try-error") next
+    if(is.null(ohlcPrices)) next
 		ohlcPrices<-as.xts(ohlcPrices)
 		liq<-Vo(ohlcPrices)
 		closePrices<-Ad(ohlcPrices)
