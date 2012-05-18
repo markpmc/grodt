@@ -48,7 +48,7 @@ taScreenerSignal<-function(symbols, mydata)
 	require(TTR)
 	require(quantmod)	
 	# Remove missing values
-	myData<-removeNA(mydata)
+	myData<-mydata
 	myClose<-Ad(myData)
 	myVolume<-Vo(myData)
 
@@ -59,11 +59,15 @@ taScreenerSignal<-function(symbols, mydata)
 	Volatility=numeric(nCols), Liquidity=numeric(nCols), Interesting=character(nCols), stringsAsFactors=FALSE)
 
 	for(i in 1:nCols){
+    print(colNames[i])
 		ohlcPrices<-myData[, grep(colNames[i], colnames(myData))]
+    ohlcPrices<-removeNA(ohlcPrices)
+    if(is.null(ohlcPrices)) next
 		liq<-myVolume[, grep(colNames[i], colnames(myVolume))]
 		closePrices<-myClose[, i]
 		closePrices<-removeNA(closePrices)
-		if(nrow(closePrices)==0) next
+    if(is.null(closePrices)) next
+		if(length(closePrices)==0 || length(closePrices) < 101) next
 		
 		# RSI
 		tmp<-last(RSI(closePrices, 21))
@@ -78,8 +82,9 @@ taScreenerSignal<-function(symbols, mydata)
 		# Momentum (ROC)
 		tmp<-last(ROC(closePrices, 10))
 		momIndicator<-ifelse(tmp<0,-1,1)
-		# Volatility
-		volIndicator<-last(TTR::volatility(ohlcPrices, n=22))
+		# Volatility - some debugging required..
+		#volIndicator<-last(TTR::volatility(ohlcPrices, n=22))
+    volIndicator<-NA
 		# Liquidity risk
 		liqRisk<-last(liq)
 	

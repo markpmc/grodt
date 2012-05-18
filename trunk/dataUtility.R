@@ -40,6 +40,11 @@ interpolateNA<-function(x)
 removeNA<-function(data)
 {
 	x<-data
+  if(is.vector(x)){
+    inds<-is.na(x)
+    if(all(inds)) return(NULL)
+    return(x[!inds])
+  }
 	na.col<-apply(is.na(x), 2, all)
   if(all(na.col)) return(NULL)
 	if(length(na.col) > 0) x<-x[, !na.col]
