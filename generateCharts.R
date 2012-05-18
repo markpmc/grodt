@@ -3,7 +3,7 @@ source('taScreeners.R')
 source('dataUtility.R')
 
 mySymbols<-scan('SymbolsYahoo.csv', what=character())
-myData<-fetchData(mySymbols, 500)
+#myData<-fetchData(mySymbols, 500)
 
 # Convert data and interpolate missing values there could be missing values left but
 # they will be removed in the individual charter
