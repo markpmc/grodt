@@ -37,14 +37,20 @@ readAndParseNordnetKeyFigures<-function(fname, numyears=5)
 	myColClasses<-c("character", rep("numeric", numyears))
 	a<-read.table(fname, sep="\t", dec=",", skip=0, header=TRUE, row.names=1, colClasses=myColClasses)
 	egetKapital<-a[grep("Eget kapital", rownames(a)), ]
+  egetKapitalSkulder<-a[grep("Summa eget kapital och skulder", rownames(a)), ]
 	antalAktier<-a[grep("Antal aktier", rownames(a)), ]
 	resultatPerAktie<-a[grep("Resultat per aktie", rownames(a)), ]
 	substansVarde<-egetKapital/antalAktier*1000
 	tillvaxt<-cbind(resultatPerAktie[1, -numyears]/resultatPerAktie[1,-1], NA)
 	pe10pris<-resultatPerAktie*10
+  soliditet<-egetKapital/egetKapitalSkulder
 	colnames(tillvaxt)<-colnames(a)
 	#a<-rbind(a, SubstansVärde=substansVarde)
-	ret<-rbind(ResultatPerAktie=resultatPerAktie, SubstansVarde=substansVarde, Tillvaxt=tillvaxt, PE_10_Pris=pe10pris)
+	ret<-rbind(ResultatPerAktie=resultatPerAktie, 
+             SubstansVarde=substansVarde, 
+             Tillvaxt=tillvaxt, 
+             PE_10_Pris=pe10pris,
+             Soliditet=soliditet)
 	ret<-round(ret, 2)
 	ret
 }
