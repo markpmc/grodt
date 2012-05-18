@@ -16,6 +16,6 @@ myxts<-apply(myxts, 2, interpolateNA)
 generateCharts(mySymbols, myxts, path="charts")
 
 # Screen all the stocks
-myScreenV<-taScreenerValues(mySymbols, myData)
+myScreenV<-taScreenerValues(mySymbols, as.data.frame(myxts))
 myScreenS<-taScreenerSignal(mySymbols, myData)
 
